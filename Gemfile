@@ -4,7 +4,6 @@ group :default do
   gem "goliath"
   gem "em-synchrony"
   gem "em-http-request"
-  gem "mp-deployment", "0.0.21"
   gem "json"
   gem "rake"
 end
