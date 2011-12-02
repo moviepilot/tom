@@ -2,6 +2,7 @@
 
 require 'rubygems'
 require 'bundler'
+
 begin
   Bundler.setup(:default, :development)
 rescue Bundler::BundlerError => e
@@ -9,9 +10,16 @@ rescue Bundler::BundlerError => e
   $stderr.puts "Run `bundle install` to install missing gems"
   exit e.status_code
 end
-require 'rake'
 
+require 'rake'
+require 'yard'
+require 'rspec/core/rake_task'
 require 'jeweler'
+
+
+#
+#  Jeweler Stuff
+#
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "tom"
@@ -25,13 +33,10 @@ Jeweler::Tasks.new do |gem|
 end
 Jeweler::RubygemsDotOrgTasks.new
 
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-end
 
+#
+#  Rcov
+#
 require 'rcov/rcovtask'
 Rcov::RcovTask.new do |test|
   test.libs << 'test'
@@ -40,14 +45,24 @@ Rcov::RcovTask.new do |test|
   test.rcov_opts << '--exclude "gems/*"'
 end
 
-task :default => :test
 
-require 'rake/rdoctask'
-Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
-
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "tom #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+#
+#  RSpec
+#
+task :default => [:spec]
+task :test => [:spec]
+desc "run spec tests"
+RSpec::Core::RakeTask.new('spec') do |t|
+  t.pattern = 'spec/**/*_spec.rb'
 end
+
+
+#
+#  Yard
+#
+desc 'Generate documentation'
+YARD::Rake::YardocTask.new do |t|
+  t.files   = ['lib/**/*.rb', '-', 'LICENSE']
+  t.options = ['--main', 'README.md', '--no-private']
+end
+
