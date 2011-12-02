@@ -20,4 +20,5 @@ group :development do
   gem "rspec"
   gem "webmock"
   gem "yard"
+  gem "rdiscount"
 end
