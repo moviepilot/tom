@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jannis Hermanns"]
   s.date = "2011-12-02"
-  s.description = "TODO: longer description of your gem"
+  s.description = " Tom uses Goliath to dispatch HTTP requests to multiple other APIs (via Adapters) in parallel. In a next step, a Merger merges the result and responds to the clients request."
   s.email = "jannis@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".document",
+    ".rvmrc",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE.txt",
@@ -35,11 +36,11 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb",
     "tom.gemspec"
   ]
-  s.homepage = "http://github.com/jayniz/tom"
+  s.homepage = "http://github.com/moviepilot/tom"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.10"
-  s.summary = "TODO: one-line summary of your gem"
+  s.summary = "Parallel request dispatcher and merger for goliath.io"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
