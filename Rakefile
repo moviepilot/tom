@@ -23,10 +23,10 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "tom"
-  gem.homepage = "http://github.com/jayniz/tom"
+  gem.homepage = "http://github.com/moviepilot/tom"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Parallel request dispatcher and merger for goliath.io}
+  gem.description = %Q{ Tom uses Goliath to dispatch HTTP requests to multiple other APIs (via Adapters) in parallel. In a next step, a Merger merges the result and responds to the clients request.}
   gem.email = "jannis@gmail.com"
   gem.authors = ["Jannis Hermanns"]
   # dependencies defined in Gemfile
