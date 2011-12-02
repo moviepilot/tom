@@ -1,6 +1,7 @@
+![Tom Smykowski](http://dl.dropbox.com/u/1953503/tom%20smykowsky.jpg)
 # Tom Smykowski - I have people skills!
 
-Tom Smykowski, Tom for short, is a gem that takes the specifications from the customers and brings them down to the engineers. He has people skills. He is good at dealing with people. If this does not make sense to you, please refer to [this introductory video](http://www.youtube.com/watch?v=mGS2tKQhdhY).
+Tom Smykowski, Tom for short, is a gem that takes the specifications from the customers and brings them down to the engineers. He has people skills. He is good at dealing with people. If this does not make sense to you, please refer to [this introductory video](http://www.youtube.com/watch?v=mGS2tKQhdhY) and, of course, [the movie](http://www.imdb.com/video/screenplay/vi3215851801/).
 
 To go into technical detail: Tom uses [Goliath](http://goliath.io) to dispatch HTTP requests to multiple other APIs (via `Adapter`s) in parallel. In a next step, a `Merger` merges the result and responds to the clients request.
 
