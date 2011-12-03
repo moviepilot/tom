@@ -51,6 +51,7 @@ GEM
       rack-accept-media-types (>= 0.6)
     rake (0.9.2.2)
     rcov (0.9.11)
+    rdiscount (1.6.8)
     rspec (2.7.0)
       rspec-core (~> 2.7.0)
       rspec-expectations (~> 2.7.0)
@@ -87,7 +88,7 @@ DEPENDENCIES
   goliath
   jeweler (~> 1.6.4)
   json
-  rake
+  rake (~> 0.9.2)
   rcov
   rdiscount
   rspec

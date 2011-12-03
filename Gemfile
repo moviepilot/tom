@@ -5,7 +5,7 @@ group :default do
   gem "em-synchrony"
   gem "em-http-request"
   gem "json"
-  gem "rake"
+  gem "rake", "~> 0.9.2"
 end
 
 # Add dependencies to develop your gem here.
