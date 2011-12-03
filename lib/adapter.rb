@@ -7,14 +7,18 @@ module Tom
       attr_accessor :host
     end
 
+    # Registers a route with the request dispatcher
+    # so that this classes subclass gets called when
+    # a request is made. One that matches the route.
     #
-    #  Registers a route with the request dispatcher
-    #  so that this classes subclass gets called when
-    #  a request is made. One that matches the route.
+    # The route can be a string, but it becomes a 
+    # regular expression in here, followed by methods.
     #
-    #  The route can be a string, but it becomes a 
-    #  regular expression in here, followed by methods.
-    #
+    # @param route [String] The route this Adapter should 
+    #   respond to.
+    # @param methods [Array<Symbol>] Optional array of methods
+    #   that this Adapter is listening to. It defaults to
+    #   all (`:head`, `:get`, `:put`, `:post`, `:delete`)
     def self.register_route(*args)
       route = args[0]
       methods = args[1..-1]
@@ -25,11 +29,12 @@ module Tom
       @request = {}
     end
 
+    # Takes a request from rack and issues the same
+    # request again, just to a different host. This
+    # method is to be used by subclasses.
     #
-    #  Takes a request from rack and issues the same
-    #  request again, just to a different host. This
-    #  method is to be used by subclasses.
-    #
+    # @param env [Array] The incoming (original request) 
+    #   rack env object
     def forward_request(env)
       rewrite_request(env)
       options = http_request_options(env)
@@ -41,14 +46,14 @@ module Tom
       [result.response_header.status, headers, result.response]
     end
 
+    # Takes a request and generates the options for calling
+    # HttpRequest.put (or whatever the the requested
+    # REQUEST_METHOD is).
     #
-    #  Takes a request and generates the options for calling
-    #  HttpRequest.put (or whatever the the requested
-    #  REQUEST_METHOD is).
+    # It's content depends on the request method, for PUTs
+    # and POSTs this will add the request body
     #
-    #  It's content depends on the request method, for PUTs
-    #  and POSTs this will add the request body
-    #
+    # @param env [Array] A rack env object
     def http_request_options(env)
       opts = {}
       if [:put, :post].include? @request[:method]
@@ -57,35 +62,40 @@ module Tom
       opts
     end
 
+    # Extracts the given POT/PUST (hehe) body
     #
-    #  Extracts the given POT/PUST (hehe) body
-    #
+    # @param env [Array] A rack env object
     def extract_request_body(env)
       Rack::Request.new(env).POST.keys.first rescue "{}"
     end
 
+    # Takes a request from rack and extracts the request
+    # method, uri and returns the host this adapter talks
+    # to. Can be overwritten if you want to change stuff
+    # before forwarding it.
     #
-    #  Takes a request from rack and extracts the request
-    #  method, uri and returns the host this adapter talks
-    #  to. Can be overwritten if you want to change stuff
-    #  before forwarding it.
-    #
+    # @param env [Array] A rack env object
     def rewrite_request(env)
       rewritten = rewrite_host(env)
       @request = rewritten.merge(@request)
     end
 
+    # Subclasses must implement this method to handle incoming
+    # requests
+    #
+    # @param env [Array] The incoming (original request) 
+    #   rack env object
     def handle(env)
       raise "Subclass, implement #handle(env)!"
     end
 
     private
 
+    # Returns a hash that can be used as the @request variable,
+    # which is exactly like the given env except for a changed
+    # hostname.
     #
-    #  Returns a hash that can be used as the @request variable,
-    #  which is exactly like the given env except for a changed
-    #  hostname.
-    #
+    # @param env [Array] A rack env object
     def rewrite_host(env)
       { host:   self.class.host,
         uri:    env["REQUEST_URI"],

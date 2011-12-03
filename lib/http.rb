@@ -1,12 +1,16 @@
 module Tom
   module Http
 
+    # Makes a http request of the given method to the given url.
+    # Passes the options on to EM::HttpRequest.put (or whatever
+    # method has to be called) and does some error handling and
+    # works around some EM:HttpRequest oddities (see handle_errors).
     #
-    #  Makes a http request of the given method to the given url.
-    #  Passes the options on to EM::HttpRequest.put (or whatever
-    #  method has to be called) and does some error handling and
-    #  works around some EM:HttpRequest oddities (see handle_errors).
-    #
+    # @param method [Symbol] Request method, lowercase, you know
+    #   the deal
+    # @param url [String] Full url (e.g. host + path)
+    # @param options [Hash] Options to pass to EM::HttpRequest's 
+    #   get/put/post/delete method
     def self.make_request(method, url, options = {})
       Tom::LOG.info "     curl -X#{method.upcase} -d '#{options[:body]}' #{url}"
 

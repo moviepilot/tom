@@ -89,6 +89,7 @@ DEPENDENCIES
   json
   rake
   rcov
+  rdiscount
   rspec
   ruby-debug19
   shoulda
