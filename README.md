@@ -7,6 +7,12 @@ To go into technical detail: Tom uses [Goliath](http://goliath.io) to dispatch H
 
 All you have to do is define some `Adapter`s that get activated for certain routes and some `Merger`s for certain routes.
 
+As you have seen in the video above, Tom Smykowski talks extra much when
+consultants are present who might fire him. So this gem will log to
+STDOUT when you're in development mode or the BOBS environment variable
+is set. Useful for debugging, but nothing you really want in
+production/testing.
+
 # TL;DR
 
 The general flow goes like this:
@@ -63,7 +69,7 @@ In your initializer you can configure `Adapter`s like this:
 
     Sheldon.host = 'http://localhost:9292'
 
-This causes the aforementioned `rewrite_request` method to use that host name. The `forward_request` method uses an instance variable called `@request` to know what to do. `rewrite_request`, for example, takes a rack env and initializes `@request` with `:host`, `:method` and `:uri`. 
+This causes the aforementioned `rewrite_request` method to use that host name. The `forward_request` method uses an instance variable called `@request` to know what to do. `rewrite_request`, for example, takes a rack env and initializes `@request` with `:host`, `:method` and `:uri`.
 
 If the method is `POST` or `PUT`, then you should also set the appropriate `@request[:body]` if you want to use the automatic `forward_request` method.
 
@@ -72,9 +78,9 @@ If the method is `POST` or `PUT`, then you should also set the appropriate `@req
 `Mergers` work very similar to `Adapter`s. But all you have to do here is subclass it and implement the `merge` method. For example we could create a `Merger` that always ignores everything and just returns the response from Sheldon:
 
     class OnlySheldon < Tom::Merger
-    
+
       register_route "^/nodes/[0-9]+$"
-    
+
       def self.merge(env, responses)
         responses[Sheldon]
       end
