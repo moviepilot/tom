@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "tom"
-  s.version = "0.1.1"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jannis Hermanns"]
-  s.date = "2011-12-03"
+  s.date = "2011-12-06"
   s.description = " Tom uses Goliath to dispatch HTTP requests to multiple other APIs (via Adapters) in parallel. In a next step, a Merger merges the result and responds to the clients request."
   s.email = "jannis@gmail.com"
   s.extra_rdoc_files = [

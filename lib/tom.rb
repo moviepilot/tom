@@ -5,7 +5,7 @@ Goliath.env rescue Goliath.env = (ENV['RACK_ENV'] || 'development').to_sym
 
 # In dev mode, we do some logging (defaults to Logger::ERROR in other
 # envs)
-if Goliath.env == :development
+if Goliath.env == :development || ENV['BOBS']
   Tom::LOG.level = Logger::INFO
 end
 Tom::LOG.info "Started goliath in #{Goliath.env} environment (change with ruby your_app.rb -e development or by setting $RACK_ENV)"
@@ -28,9 +28,6 @@ module Tom
   #  it when it comes to parallel stuff and so on...
   #
   class GoliathAPI < Goliath::API
-    use Goliath::Rack::JSONP
-    use Goliath::Rack::Params
-    use Goliath::Rack::Formatters::JSON
     use Goliath::Rack::Render
 
     def response(env)

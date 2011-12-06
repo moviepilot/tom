@@ -62,11 +62,14 @@ module Tom
       opts
     end
 
-    # Extracts the given POT/PUST (hehe) body
+    # Extracts the given POT/PUST (hehe) body. Overwrite this
+    # if you want to do your own thing (e.g. if the params middleware
+    # made the params an object, you should return a string here as
+    # this is what we feed into the EM::HttpRequest
     #
     # @param env [Array] A rack env object
     def extract_request_body(env)
-      Rack::Request.new(env).POST.keys.first rescue "{}"
+      Rack::Request.new(env).POST rescue {}
     end
 
     # Takes a request from rack and extracts the request
