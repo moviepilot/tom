@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "tom"
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jannis Hermanns"]
-  s.date = "2011-12-06"
+  s.date = "2011-12-07"
   s.description = " Tom uses Goliath to dispatch HTTP requests to multiple other APIs (via Adapters) in parallel. In a next step, a Merger merges the result and responds to the clients request."
   s.email = "jannis@gmail.com"
   s.extra_rdoc_files = [
@@ -27,10 +27,14 @@ Gem::Specification.new do |s|
     "VERSION",
     "lib/adapter.rb",
     "lib/dispatcher.rb",
+    "lib/goliath_api.rb",
     "lib/http.rb",
     "lib/init.rb",
     "lib/merger.rb",
     "lib/tom.rb",
+    "lib/tom/config.rb",
+    "lib/tom/log.rb",
+    "lib/tom/routes.rb",
     "spec/lib/adapter_spec.rb",
     "spec/lib/dispatcher_spec.rb",
     "spec/spec_helper.rb",
