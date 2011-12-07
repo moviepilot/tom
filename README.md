@@ -111,8 +111,6 @@ Same goes for mergers.
 # Todo
 
 - handle adapter errors/states in mergers
-- register routes with concurrency on and off
-- use Goliath::Rack::Params
 - use Goliath::Rack::Heartbeat
 - think about consensus protocols
 - ...

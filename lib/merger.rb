@@ -18,7 +18,7 @@ module Tom
     def self.register_route(*args)
       route = args[0]
       methods = args[1..-1]
-      Dispatcher.register(route: /#{route}/, merger: self, methods: methods)
+      Tom.register(route: /#{route}/, merger: self, methods: methods)
     end
 
     # When the request dispatcher made all the requests,
