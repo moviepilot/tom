@@ -1,5 +1,9 @@
 module Tom
+
+  # Don't use this module directly - access these methods
+  # through {Tom} who does a `extend Tom::Config`
   module Config
+
     # @return [Hash] configuration
     def config
       @config || default_config

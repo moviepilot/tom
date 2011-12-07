@@ -1,4 +1,7 @@
 module Tom
+
+  # Please see the {https://github.com/moviepilot/tom#readme README} for
+  # examples on how to use this.
   class Merger
 
     # Registers a route with the request dispatcher
@@ -18,7 +21,7 @@ module Tom
     def self.register_route(*args)
       route = args[0]
       methods = args[1..-1]
-      Tom.register(route: /#{route}/, merger: self, methods: methods)
+      Tom::Routes.register(route: /#{route}/, merger: self, methods: methods)
     end
 
     # When the request dispatcher made all the requests,
@@ -29,7 +32,7 @@ module Tom
     #   rack env object
     # @param responses [Hash] Replies from all Adapters that
     #   got triggered by route and method, e.g.
-    #   `{MyAdapter: rack_env, MyOtherAdapter: other_env}`
+    #   `{ MyAdapter: rack_env, MyOtherAdapter: other_env }`
     # @return [Array] A rack response (for example, something
     #   like [200, {}, "body"])
     def merge(env, responses)

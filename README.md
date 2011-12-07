@@ -10,8 +10,13 @@ All you have to do is define some `Adapter`s that get activated for certain rout
 As you have seen in the video above, Tom Smykowski talks extra much when
 consultants are present who might fire him. So this gem will log to
 STDOUT when you're in development mode or the BOBS environment variable
-is set. Useful for debugging, but nothing you really want in
-production/testing.
+is set. For example, you could
+
+   BOBS=present ruby yourapp.rb
+
+Useful for debugging, but nothing you really want in production/testing.
+Also, Tom is yard documented. Just run `yard --server` and direct your
+browser to `http://localhost:8808`.
 
 # TL;DR
 

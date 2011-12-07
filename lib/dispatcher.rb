@@ -8,10 +8,11 @@ module Tom
     # to compose a response
     #
     # @param env [Array] A rack env object
-    # @return (see #merge)
+    #
+    # @return [Array] Whatever {Tom::Dispatcher.merge} had to say
     def self.dispatch(env)
       route, method = route_and_method(env)
-      adapters = Tom.adapters_for_route(route, method)
+      adapters = Tom::Routes.adapters_for_route(route, method)
       return [404, {}, '{reason: "No adapters for this route"}'] if adapters.empty?
 
       # Hit APIs. All at the same time. Oh, mygodd!
@@ -35,12 +36,13 @@ module Tom
     # The merger used depends on the route.
     #
     # @param env [Array] A rack env object
+    #
     # @return [Array] The merged result of all requests
     #   made as an array of status code, headers and body, e.g.
-    #   `[200, {}, "Hi!"]`
+    #   [200, {}, "Hi!"]
     def self.merge(env, responses)
       route, method = route_and_method(env)
-      merger = Tom.merger_for_route(route, method)
+      merger = Tom::Routes.merger_for_route(route, method)
       Tom::LOG.info "Merging with:"
       Tom::LOG.info "  -> #{merger}"
       merger.new.merge env, responses
@@ -48,10 +50,12 @@ module Tom
 
 
 
+    # Extract the route/request uri and the method from a
+    # rack env
     #
-    #  Extract the route/request uri and the method from a
-    #  rack env
+    # @param env [Hash] A rack env
     #
+    # @return [Array] Contains request_path, request_method as symbols
     def self.route_and_method(env)
       [env["REQUEST_PATH"],
        env["REQUEST_METHOD"].downcase.to_sym]
