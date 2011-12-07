@@ -2,6 +2,12 @@ require 'em-synchrony/em-http'
 require_relative 'http'
 
 module Tom
+
+  # Please see the {https://github.com/moviepilot/tom#readme README} for
+  # examples on how to use this.
+  #
+  # @attribute host [String] The hostname this adapter is connecting to (the
+  #   "other" API endpoint).
   class Adapter
     class << self
       attr_accessor :host
@@ -16,13 +22,16 @@ module Tom
     #
     # @param route [String] The route this Adapter should 
     #   respond to.
+    #
     # @param methods [Array<Symbol>] Optional array of methods
     #   that this Adapter is listening to. It defaults to
-    #   all (`:head`, `:get`, `:put`, `:post`, `:delete`)
+    #   all (:head, :get, :put, :post, :delete)
+    #
+    # @return [Hash] See {Tom::Routes.register}
     def self.register_route(*args)
       route = args[0]
       methods = args[1..-1]
-      Dispatcher.register(route: /#{route}/, adapter: self, methods: methods)
+      Tom::Routes.register(route: /#{route}/, adapter: self, methods: methods)
     end
 
     def initialize
@@ -35,6 +44,9 @@ module Tom
     #
     # @param env [Array] The incoming (original request) 
     #   rack env object
+    #
+    # @return [Array] Your beloved triple of [status_code, headers,
+    #   response_body]
     def forward_request(env)
       rewrite_request(env)
       options = http_request_options(env)
@@ -54,6 +66,10 @@ module Tom
     # and POSTs this will add the request body
     #
     # @param env [Array] A rack env object
+    #
+    # @return [Hash] Has the value of @request[:body] inside its
+    #   :body key, but only when the request method in the given
+    #   env matches :put or :post
     def http_request_options(env)
       opts = {}
       if [:put, :post].include? @request[:method]
@@ -68,6 +84,10 @@ module Tom
     # this is what we feed into the EM::HttpRequest
     #
     # @param env [Array] A rack env object
+    #
+    # @return [Hash] Returns whatever the client POSTed/PUT and defaults
+    #   to an empty hash (while debugging, consider your middlewares,
+    #   they might touch this depending on the Content-Type)
     def extract_request_body(env)
       Rack::Request.new(env).POST rescue {}
     end
@@ -78,6 +98,8 @@ module Tom
     # before forwarding it.
     #
     # @param env [Array] A rack env object
+    #
+    # @return [Hash] The @request variable
     def rewrite_request(env)
       rewritten = rewrite_host(env)
       @request = rewritten.merge(@request)
@@ -88,6 +110,8 @@ module Tom
     #
     # @param env [Array] The incoming (original request) 
     #   rack env object
+    #
+    # @return [void] This mofo raises and never returns anything.
     def handle(env)
       raise "Subclass, implement #handle(env)!"
     end
@@ -99,6 +123,8 @@ module Tom
     # hostname.
     #
     # @param env [Array] A rack env object
+    #
+    # @return [Hash] With :host, :uri and :method
     def rewrite_host(env)
       { host:   self.class.host,
         uri:    env["REQUEST_URI"],
