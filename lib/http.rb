@@ -30,7 +30,7 @@ module Tom
 
     def self.handle_errors(method, url, result)
       result.errback do
-        raise "Tom::Adapter.forward_request error #{method} #{url}"
+        raise "Tom::Adapter.forward_request error '#{result.error}' for #{method} #{url}"
       end
       return unless result.response_header.status == 0
       raise "EM::HttpRequest returned response code 0 for #{url} - timeout?"
