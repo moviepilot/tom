@@ -122,7 +122,7 @@ module Tom
         next unless reg_route.match(route)
         return mergers.first
       end
-      raise "Found no merger for route #{route}"
+      nil
     end
 
     #
