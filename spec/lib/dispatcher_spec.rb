@@ -12,9 +12,6 @@ class APIAdapter2 <  Tom::Adapter
 end
 APIAdapter2.host = 'http://api_host_2.com'
 
-class Merger < Tom::Merger
-  register_route ".*"
-end
 
 describe Tom do
 
@@ -22,9 +19,16 @@ describe Tom do
 
   end
 
-  it "emits a 404 when there are no adapters for the route" do
+  it "emits a 200 even when there are no adapters for the route" do
     with_api(Tom::GoliathAPI) do
       request = get_request(:path => '/walruses/5')
+      request.response_header.status.should == 200
+    end
+  end
+
+  it "emits a 404 when there are no mergers for the route" do
+    with_api(Tom::GoliathAPI) do
+      request = get_request(:path => '/')
       request.response_header.status.should == 404
     end
   end
