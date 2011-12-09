@@ -11,21 +11,18 @@ module Tom
     #
     # @return [Array] Whatever {Tom::Dispatcher.merge} had to say
     def self.dispatch(env)
-      route, method = route_and_method(env)
-      adapters = Tom::Routes.adapters_for_route(route, method)
-      return [404, {}, '{reason: "No adapters for this route"}'] if adapters.empty?
 
-      # Hit APIs. All at the same time. Oh, mygodd!
-      responses = {}
+      # 1. hit APIs. All at the same time. Oh, mygodd!
       Tom::LOG.info "#{env['REQUEST_METHOD'].upcase} #{env['REQUEST_URI']}"
-      Tom::LOG.info "Dispatching to:"
-      EM::Synchrony::FiberIterator.new(adapters, adapters.count).map do |clazz|
-        Tom::LOG.info "  -> #{clazz}"
-        (responses[clazz] ||= []) <<  clazz.new.handle(env)
-      end
+      responses = parallel_adapter_dispatch(env)
 
+      # 2. merge
       merged = merge(env, responses)
+
+      # 3. ???
       Tom::LOG.info "-------------------------------------------------------n"
+
+      # 4. profit
       merged
     end
 
@@ -42,10 +39,15 @@ module Tom
     #   [200, {}, "Hi!"]
     def self.merge(env, responses)
       route, method = route_and_method(env)
-      merger = Tom::Routes.merger_for_route(route, method)
-      Tom::LOG.info "Merging with:"
-      Tom::LOG.info "  -> #{merger}"
-      merger.new.merge env, responses
+      if merger = Tom::Routes.merger_for_route(route, method)
+        Tom::LOG.info "Merging with:"
+        Tom::LOG.info "  -> #{merger}"
+        merged = merger.new.merge(env, responses)
+      else
+        merged = [404, {}, ""]
+      end
+      merged[1]["Adapters-Used"] = responses.keys.join(",")
+      merged
     end
 
 
@@ -59,6 +61,29 @@ module Tom
     def self.route_and_method(env)
       [env["REQUEST_PATH"],
        env["REQUEST_METHOD"].downcase.to_sym]
+    end
+
+    private
+
+    # Uses a EM::Synchrony::FiberIterator to call all adapters that registered
+    # for this route at the same time.
+    #
+    # @param env [Hash] A rack env object
+    #
+    # @return [Hash] Keys are the adapter classes, values are arrays of responses
+    #   they generated (the [status_code, headers, body] triplets)
+    def self.parallel_adapter_dispatch(env)
+      responses = {}
+      route, method = route_and_method(env)
+      adapters = Tom::Routes.adapters_for_route(route, method)
+      return responses if adapters.empty?
+
+      Tom::LOG.info "Dispatching to:"
+      EM::Synchrony::FiberIterator.new(adapters, adapters.count).map do |clazz|
+        Tom::LOG.info "  -> #{clazz}"
+        (responses[clazz] ||= []) <<  clazz.new.handle(env)
+      end
+      responses
     end
 
   end

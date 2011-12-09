@@ -49,6 +49,8 @@ This class basically does what is pictured in the flow above:
 
 To add APIs or change the behavior of Tom, you don't have to touch this class, though. `Adapter` and `Merger` is what you're looking for.
 
+Adapters are optional, so it's completely valid for a route to only have a merger. If, however, there is no merger registered for a given route, a 404 will be emitted.
+
 ## Tom::Adapter
 
 The `Adapter` class comes with the class methods:
@@ -115,6 +117,7 @@ Same goes for mergers.
 
 # Todo
 
+- document special headers we inject (e.g. which adapters were used, etc)
 - handle adapter errors/states in mergers
 - use Goliath::Rack::Heartbeat
 - think about consensus protocols

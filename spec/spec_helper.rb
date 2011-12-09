@@ -35,6 +35,6 @@ end
 require_relative '../lib/tom'
 
 class Merger < Tom::Merger
-  register_route ".*"
+  register_route "^/.+$"
   def merge(a,b);[200, {}, ""]; end
 end
