@@ -12,7 +12,7 @@ module Tom
     # @param options [Hash] Options to pass to EM::HttpRequest's 
     #   get/put/post/delete method
     def self.make_request(method, url, options = {})
-      Tom::LOG.info "     curl -X#{method.upcase} -d '#{options[:body]}' #{url}"
+      Tom::Log.logger.info "     curl -X#{method.upcase} -d '#{options[:body]}' #{url}"
 
       conn = EM::HttpRequest.new(url, connection_options)
       result  = conn.send(method, options)
