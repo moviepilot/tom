@@ -22,8 +22,8 @@ module Tom
     # Hardcoded JSON stacktrace stuff for now...
     def handle_exception(e, env)
       trace = e.backtrace.join "\n"
-      Tom::LOG.info e
-      Tom::LOG.info trace
+      Tom::Log.logger.info e
+      Tom::Log.logger.info trace
       [500, {}, {error: e,
         stacktrace: trace,
         url:        env["REQUEST_URI"]

@@ -13,14 +13,14 @@ module Tom
     def self.dispatch(env)
 
       # 1. hit APIs. All at the same time. Oh, mygodd!
-      Tom::LOG.info "#{env['REQUEST_METHOD'].upcase} #{env['REQUEST_URI']}"
+      Tom::Log.logger.info "#{env['REQUEST_METHOD'].upcase} #{env['REQUEST_URI']}"
       responses = parallel_adapter_dispatch(env)
 
       # 2. merge
       merged = merge(env, responses)
 
       # 3. ???
-      Tom::LOG.info "-------------------------------------------------------n"
+      Tom::Log.logger.info "-------------------------------------------------------"
 
       # 4. profit
       merged
@@ -40,8 +40,8 @@ module Tom
     def self.merge(env, responses)
       route, method = route_and_method(env)
       if merger = Tom::Routes.merger_for_route(route, method)
-        Tom::LOG.info "Merging with:"
-        Tom::LOG.info "  -> #{merger}"
+        Tom::Log.logger.info "Merging with:"
+        Tom::Log.logger.info "  -> #{merger}"
         merged = merger.new.merge(env, responses)
       else
         merged = [404, {}, ""]
@@ -78,9 +78,9 @@ module Tom
       adapters = Tom::Routes.adapters_for_route(route, method)
       return responses if adapters.empty?
 
-      Tom::LOG.info "Dispatching to:"
+      Tom::Log.logger.info "Dispatching to:"
       EM::Synchrony::FiberIterator.new(adapters, adapters.count).map do |clazz|
-        Tom::LOG.info "  -> #{clazz}"
+        Tom::Log.logger.info "  -> #{clazz}"
         (responses[clazz] ||= []) <<  clazz.new.handle(env)
       end
       responses
