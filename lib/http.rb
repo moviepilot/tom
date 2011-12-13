@@ -16,7 +16,9 @@ module Tom
 
       conn = EM::HttpRequest.new(url, connection_options)
       result  = conn.send(method, options)
-      handle_errors(method, url, result)
+
+      # Disabling this for a while
+      # handle_errors(method, url, result)
 
       result
     end
