@@ -20,7 +20,7 @@ module Tom
       merged = merge(env, responses)
 
       # 3. ???
-      Tom::Log.logger.info "-------------------------------------------------------n"
+      Tom::Log.logger.info "-------------------------------------------------------"
 
       # 4. profit
       merged
