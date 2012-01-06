@@ -15,7 +15,7 @@ is set. For example, you could
    BOBS=present ruby yourapp.rb
 
 Useful for debugging, but nothing you really want in production/testing.
-Also, Tom is yard documented. Just run `yard --server` and direct your
+Also, Tom is yard documented. Just run `yard server` and direct your
 browser to `http://localhost:8808`.
 
 # TL;DR
